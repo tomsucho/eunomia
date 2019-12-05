@@ -43,7 +43,7 @@ build:
 run:
 	go run ./cmd/manager/main.go
 
-test: fmt lint vet check-generate test-unit test-e2e
+test: check-fmt lint vet check-generate test-unit test-e2e
 
 test-e2e:
 	./scripts/e2e-test.sh
@@ -55,8 +55,8 @@ test-unit:
 install:
 	cat deploy/crds/*crd.yaml | kubectl apply -f-
 
-# Run gofmt against code
-fmt:
+# Check if gofmt against code is clean
+check-fmt:
 	test -z "$(shell gofmt -l . | grep -v ^vendor)"
 
 lint:
