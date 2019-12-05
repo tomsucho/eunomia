@@ -43,7 +43,7 @@ build:
 run:
 	go run ./cmd/manager/main.go
 
-test: fmt lint vet test-unit test-e2e
+test: fmt lint vet check-generate test-unit test-e2e
 
 test-e2e:
 	./scripts/e2e-test.sh
@@ -65,6 +65,10 @@ lint:
 # Run go vet against code
 vet:
 	VET_INPUT="$(shell go list ./... | grep -v /vendor/)"; GO111MODULE=on go vet $$VET_INPUT
+
+# Check that running generate doesn't change the code
+check-generate: generate
+	git diff --exit-code
 
 e2e-test-images: build
 	TRAVIS_TAG=v999.0.0 ./scripts/build-images.sh ${REPOSITORY}
